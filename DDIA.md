@@ -1,3 +1,5 @@
+
+
 ### Partitioning of Key-Value Data
 
 ##### Partitioning by Key Range
@@ -82,6 +84,10 @@ That is no problem if they are reading and writing different parts of the databa
 
 Durability is the promise that once a transaction has committed successfully, any data it has written will not be forgotten, even if there is a hardware fault or the database crashes.
 
+race conidction
+
+![1591478212876](Pictures/1591478212876.jpg)
+
 #### Single-Object and Multi-Object Operations
 
 Now, whenever a new message comes in, you have to increment the unread counter as well, and whenever a message is marked as read, you also have to decrement the unread counter.
@@ -101,3 +107,26 @@ There are some use cases in which single-object inserts, updates, and deletes ar
 violating its guarantee of atomicity, isolation, or durability, it would rather abandon the transaction entirely than allow it to remain half-finished. Errors will inevitably happen, but many software developers prefer to think only about the happy path rather than the intricacies of error handling.
 
 **Retry** If the transaction actually succeeded, but the network failed while the server triedto acknowledge the successful commit to the client (so the client thinks it failed), then retrying the transaction causes it to be performed twice
+
+### Weak Isolation Levels
+
+#### Read Committed
+
+Even many popular relational database systems (which are usually considered “ACID”) use weak isolation, so they wouldn’t necessarily have prevented these bugs from occurring.
+
+The most basic level of transaction isolation is read committed.v It makes two guarantees:
+
+1. When reading from the database, you will only see data that has been committed (no dirty reads).
+
+2. When writing to the database, you will only overwrite data that has been committed (no dirty writes)
+
+   **No Dirty Read**
+
+![image-20200523155651545](/Users/gaozhipeng/Library/Application Support/typora-user-images/image-20200523155651545.png)
+
+**No Dirty Write**
+
+![image-20200523160420020](/Users/gaozhipeng/Library/Application Support/typora-user-images/image-20200523160420020.png)
+
+**Snapshot Isolation and Repeatable Read**
+
